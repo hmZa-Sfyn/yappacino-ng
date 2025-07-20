@@ -9,7 +9,6 @@ function usage() {
 Usage:
   yapm init                # Initialize a new yap project
   yapm new <name>          # Create a new yap project in <name> folder
-  yapm install <pkg>       # Install a yap package (simulated)
   yapm transpile           # Transpile all .yap files to .js
   yapm fix-imports         # Fix imports in .yap files
 `);
@@ -35,16 +34,6 @@ function newProject(name) {
     fs.mkdirSync(name);
     process.chdir(name);
     initProject();
-}
-
-function installPkg(pkg) {
-    // Simulate package install
-    const pkgFile = 'package.yap.json';
-    if (!fs.existsSync(pkgFile)) return console.log('Not a yap project. Run yapm init first.');
-    const data = JSON.parse(fs.readFileSync(pkgFile));
-    data.dependencies[pkg] = 'latest';
-    fs.writeFileSync(pkgFile, JSON.stringify(data, null, 2));
-    console.log(`Installed ${pkg}`);
 }
 
 function transpile() {
@@ -74,7 +63,6 @@ const args = process.argv.slice(2);
 if (args.length === 0) usage();
 else if (args[0] === 'init') initProject();
 else if (args[0] === 'new') newProject(args[1]);
-else if (args[0] === 'install') installPkg(args[1]);
 else if (args[0] === 'transpile') transpile();
 else if (args[0] === 'fix-imports') fixImports();
 else usage();
