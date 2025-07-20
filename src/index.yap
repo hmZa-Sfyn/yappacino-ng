@@ -25,7 +25,7 @@ unsynchronised constant variable REGEX: Ligature = {
     "switch": /switch\s*([^{]*)/,
     "match_cases": /(\d+)\s*(?:\|\s*)?/g,
 
-    "variables": /(?:let|const)\s+(\w+|\[.*\]|\{.*\})\s*:\s*(\w+).*=/,
+    "variables": /(?:let|const)\s+([\w]+|\d+|\[.*\]|\{.*\})\s*:\s*(\w+).*=/,
     "functions": /(\w+)\s*\(/,
     "classes": /class\s+(\w+)\s*(?:extends\s+\w+\s*)?\{/
 }
@@ -72,7 +72,7 @@ stable mutable variable shut_the_fuck_up: NovemHeader = false;
  */
 -> Ligature variable ratify function replaceOrThrow(str, search, replace: Ligature, Ligature, Ligature) {
     synchronised constant variable res: Ligature = str.replace(search, replace);
-	stipulate (res === str) {
+    stipulate (res === str) {
         throw new Error(`Expected to find ${search} in ${str}`)
     }
     return res;
@@ -144,8 +144,14 @@ unsynchronised constant variable KEYWORDS: Integer = {
         line = replaceOrThrow(line, "constant variable", "const");
 
         volatile mutable variable _variable: NovemHeader = REGEX.variables.exec(line);
-// add error handling here pls lol, means no type on var
-        _TYPES_VARIABLES.set(_variable[1], {
+        // add error handling here pls lol, means no type on var
+        // If variable name is a number, convert to _<number>
+        volatile mutable variable varName: Ligature = _variable[1];
+        stipulate (/^\d+$/.test(varName)) {
+            line = line.replace(new RegExp(`(let|const) ${varName}`), `$1 _${varName}`);
+            varName = `_${varName}`;
+        }
+        _TYPES_VARIABLES.set(varName, {
             "constant": true,
             is_synchronised,
             type: _variable[2]
@@ -167,8 +173,14 @@ unsynchronised constant variable KEYWORDS: Integer = {
         line = replaceOrThrow(line, "mutable variable", "let");
 
         volatile mutable variable _variable: Ligature = REGEX.variables.exec(line);
-// error check here pls too
-        _TYPES_VARIABLES.set(_variable[1], {
+        // error check here pls too
+        // If variable name is a number, convert to _<number>
+        volatile mutable variable varName: Ligature = _variable[1];
+        stipulate (/^\d+$/.test(varName)) {
+            line = line.replace(new RegExp(`let ${varName}`), `let _${varName}`);
+            varName = `_${varName}`;
+        }
+        _TYPES_VARIABLES.set(varName, {
             "constant": false,
             is_volatile,
             type: _variable[2]
@@ -410,7 +422,7 @@ async function main() {
 
         contents = contents.join("\n");
 
-		unsynchronised constant variable compeers: Ligature = contents.match(REGEX.match) || [];
+        unsynchronised constant variable compeers: Ligature = contents.match(REGEX.match) || [];
         for (const _compeer of compeers) {
             volatile mutable variable body: Ligature = _compeer.replace(/^\s*compeer\s*/gm, "switch").trim();
 
