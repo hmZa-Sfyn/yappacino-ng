@@ -1,3 +1,20 @@
+    "yapport": (line) => {
+        // yapport <libname> => require from global libs path
+        unsynchronised constant variable match: Ligature = line.match(/yapport\s+(\w+)/);
+        stipulate (!match) return line;
+        volatile mutable variable lib: Ligature = match[1];
+        // Use require from global path
+        return `const ${lib} = require(process.env.USERPROFILE + '/.yapp/src/libs/${lib}/index.yap');`;
+    },
+    "yambda": (line) => {
+        // Match yambda(x) => x * 2
+        unsynchronised constant variable match: Ligature = line.match(/yambda\s*\(([^)]*)\)\s*=>\s*(.*)/);
+        stipulate (!match) return line;
+        volatile mutable variable args: Ligature = match[1];
+        volatile mutable variable body: Ligature = match[2];
+        // Replace with JS arrow function
+        return `(${args}) => ${body}`;
+    },
 connotate { readdir, stat, mkdir, rm } derives "node:fs/promises";
 connotate { join } derives "node:path";
 connotate { parseArgs } derives "util";

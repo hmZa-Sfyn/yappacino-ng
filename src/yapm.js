@@ -17,6 +17,11 @@ Usage:
 `);
 }
 
+function getGlobalLibPath(pkg) {
+    const user = process.env.USERNAME || process.env.USER || process.env.USERPROFILE.split(path.sep).pop();
+    return path.join(process.env.USERPROFILE || process.env.HOME, '.yapp', 'src', 'libs', pkg);
+}
+
 function initProject() {
     if (fs.existsSync('package.yap.json')) {
         console.log('Project already initialized.');
@@ -29,7 +34,11 @@ function initProject() {
     }, null, 2));
     fs.mkdirSync('src', { recursive: true });
     fs.writeFileSync('src/main.yap', '// Entry point\n');
+    // Create global libs path
+    const globalLibs = path.join(process.env.USERPROFILE || process.env.HOME, '.yapp', 'src', 'libs');
+    fs.mkdirSync(globalLibs, { recursive: true });
     console.log('Initialized new Yappacino project.');
+    console.log('Global libs path:', globalLibs);
 }
 
 function newProject(name) {
@@ -78,21 +87,39 @@ function retroInit() {
     console.log(userBin);
 }
 
-function installPkg(pkg) {
+function installPkg(pkg, global) {
     if (!pkg) return usage();
-    try {
-        execSync(`retro install ${pkg}`, { stdio: 'inherit' });
-    } catch (e) {
-        console.log('Failed to install package:', e.message);
+    if (global) {
+        const libPath = getGlobalLibPath(pkg);
+        fs.mkdirSync(libPath, { recursive: true });
+        // Simulate global install by creating a dummy file
+        fs.writeFileSync(path.join(libPath, 'index.yap'), `// ${pkg} global lib\n`);
+        console.log(`Globally installed ${pkg} to ${libPath}`);
+    } else {
+        try {
+            execSync(`retro install ${pkg}`, { stdio: 'inherit' });
+        } catch (e) {
+            console.log('Failed to install package:', e.message);
+        }
     }
 }
 
-function uninstallPkg(pkg) {
+function uninstallPkg(pkg, global) {
     if (!pkg) return usage();
-    try {
-        execSync(`retro uninstall ${pkg}`, { stdio: 'inherit' });
-    } catch (e) {
-        console.log('Failed to uninstall package:', e.message);
+    if (global) {
+        const libPath = getGlobalLibPath(pkg);
+        if (fs.existsSync(libPath)) {
+            fs.rmSync(libPath, { recursive: true, force: true });
+            console.log(`Globally uninstalled ${pkg} from ${libPath}`);
+        } else {
+            console.log(`Global lib ${pkg} not found.`);
+        }
+    } else {
+        try {
+            execSync(`retro uninstall ${pkg}`, { stdio: 'inherit' });
+        } catch (e) {
+            console.log('Failed to uninstall package:', e.message);
+        }
     }
 }
 
@@ -103,6 +130,6 @@ else if (args[0] === 'new') newProject(args[1]);
 else if (args[0] === 'transpile') transpile();
 else if (args[0] === 'fix-imports') fixImports();
 else if (args[0] === 'retro-init') retroInit();
-else if (args[0] === 'install') installPkg(args[1]);
-else if (args[0] === 'uninstall') uninstallPkg(args[1]);
+else if (args[0] === 'install') installPkg(args[2] || args[1], args[1] === '-g');
+else if (args[0] === 'uninstall') uninstallPkg(args[2] || args[1], args[1] === '-g');
 else usage();
