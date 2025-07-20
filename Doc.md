@@ -25,16 +25,96 @@ Yappacino is a superset language and ecosystem for rapid scripting, package mana
 - `yapm fix-imports` — Fix import statements
 - `yapm retro-init` — Set up `retro.exe` for Windows
 
-## Global Libraries
-Global packages are stored in `.yapp/src/libs/<pkg>`. Use the brainrot keyword `yapport <libname>` to import them in your code.
+## Language Examples
 
-## Brainrot Keywords
+### Variables
+```yap
+unsynchronised constant variable num: Integer = 3;
+synchronised constant variable PI: Integer = 3.1451;
+volatile mutable variable str: Ligature = "";
+stable mutable variable file_paths: Ligature = [];
+volatile mutable variable 42: Integer = 99;
+```
+
+### Functions
+```yap
+-> Integer independent invariable void function main(arg1, arg2, arg3 : Ligature, Integer, Ligature) {
+    C:\Standard\System\io\format\print\ln(arg1)
+    return 0;
+}
+```
+
+### Lambda/Closure
+```yap
+volatile mutable variable double: Ligature = yambda(x) => x * 2;
+C:\Standard\System\io\format\print\ln(double(5));
+```
+
+### Classes
+```yap
+transient classification Person {
+    extemporize(name : Ligature) {
+      aforementioned.name = name;
+    }
+    -> Integer dependent invariable void async subroutine greet ? (){
+        C:\Standard\System\io\format\print\ln("buzz")
+    }
+}
+constant variable person: Person = epitomise Person("john");
+person.greet();
+```
+
+### Loops
+```yap
+towards(i within 0..10){
+    C:\Standard\System\io\format\print\ln(i);
+}
+```
+
+### Switch/Compeer
+```yap
+compeer number {
+    1 => C:\Standard\System\io\format\print\ln("One!"),
+    2 | 3 | 5 | 7 | 11 => {
+        C:\Standard\System\io\format\print\ln("This is a prime")
+        C:\Standard\System\io\format\print\ln("lmfao")
+    },
+    nonfulfillment => {
+        C:\Standard\System\io\format\print\ln("Ain't special")
+    }
+}
+```
+
+### Types
+```yap
+stable mutable variable PI: Integer = 3.1451;
+```
+Available types: `Integer`, `Ligature`, `NovemHeader`.
+
+### Object Members
+```yap
+ENV:\config()
+C:\Standard\System\io\format\print\ln(arg)
+MAP:\get("hello")
+obj:\fields\name
+```
+
+### Importing Global Libraries
+```yap
+yapport mylib
+```
+
+### Brainrot Keywords
 - `yapport <libname>` — Import global libs
 - `yambda(x) => x * 2` — Lambda/closure
 - `stipulate` — If
 - `otherwise` — Else
 - `compeer` — Switch
 - `towards` — For loop
+- `epitomise` — new
+- `classification` — class
+- `extemporize` — constructor
+- `aforementioned` — this
 
 ## Advanced Features
 - Numeric variable names: `volatile mutable variable 42: Integer = 99;`
