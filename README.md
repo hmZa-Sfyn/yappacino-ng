@@ -168,3 +168,26 @@ It isn't! Yappacino is written in Yappacino! Take a look at `src/index.yap`
 
 GitHub doesn't recognise `.yap` as a valid programming language :)
 
+# Yappacino
+
+Yappacino is a superset scripting language and ecosystem for rapid development, featuring brainrot keywords, global package management, and a custom CLI (`yapm`).
+
+## Features
+- Custom syntax and keywords
+- Package manager (`yapm`) for project creation, install/uninstall, transpile, and import fixing
+- Integration with `retro.exe` for Windows
+- Global library support via `.yapp/src/libs`
+- Fun import keyword: `yapport <libname>`
+
+## Quick Start
+1. `yapm init` — Initialize a new project
+2. `yapm new <name>` — Create a new project
+3. `yapm install <pkg>` — Install a package
+4. `yapm install -g <pkg>` — Install a global package
+5. `yapm transpile` — Transpile `.yap` files to JS
+6. `yapm fix-imports` — Fix import statements
+7. `yapm retro-init` — Set up `retro.exe` for Windows
+
+## License
+See `LICENSE.md` for details.
+
