@@ -4,8 +4,10 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+const YAP_VERSION = '1.1.0';
+
 function usage() {
-    console.log(`Yappacino Package Manager (yapm)
+    console.log(`Yappacino Package Manager (yapm) v${YAP_VERSION}
 Usage:
   yapm init                # Initialize a new yap project
   yapm new <name>          # Create a new yap project in <name> folder
@@ -13,7 +15,9 @@ Usage:
   yapm fix-imports         # Fix imports in .yap files
   yapm retro-init          # Initialize retro.exe integration
   yapm install <pkg>       # Install a package
+  yapm install -g <pkg>    # Install a global package
   yapm uninstall <pkg>     # Uninstall a package
+  yapm uninstall -g <pkg>  # Uninstall a global package
 `);
 }
 

@@ -1,6 +1,7 @@
-# ☕ Yappacino
+# ☕ Yappacino v1.1.0
 A verbose JavaScript superset that makes you yap a lot.
 
+![version](https://img.shields.io/badge/version-1.1.0-blue)
 
 ## Explanation
 - `yap` is the extension for Yappacino. Example: `main.yap`
@@ -9,19 +10,37 @@ A verbose JavaScript superset that makes you yap a lot.
 - In projects that expect JS code, set their source to `dist/main.js` instead of `main.yap`.
 - Every time you modify `main.yap` & want to run it, you can run `./yap && node dist/main.yap`
 
-## Stupid javascript runtime crashes
-If the `yap` executable in **Releases** fails, please run `bun src/backup/yapped_index.js`. For instructions on what the `backup` folder is, please read the `README.md` inside it!
+## CLI Tool: yapm
+Yappacino comes with a CLI tool for project management and package handling:
+- `yapm init` — Initialize a new project
+- `yapm new <name>` — Create a new project
+- `yapm install <pkg>` — Install a package
+- `yapm install -g <pkg>` — Install a global package to `.yapp/src/libs/<pkg>`
+- `yapm uninstall <pkg>` — Uninstall a package
+- `yapm uninstall -g <pkg>` — Uninstall a global package
+- `yapm transpile` — Transpile `.yap` files to JS
+- `yapm fix-imports` — Fix import statements
+- `yapm retro-init` — Set up `retro.exe` for Windows
+
+## Global Libraries
+Global packages are stored in `.yapp/src/libs/<pkg>`. Use the brainrot keyword `yapport <libname>` to import them in your code.
+
+## Brainrot Keywords
+- `yapport <libname>` — Import global libs
+- `yambda(x) => x * 2` — Lambda/closure
+- `stipulate` — If
+- `otherwise` — Else
+- `compeer` — Switch
+- `towards` — For loop
 
 ## Variables
 Example:
 ```js
 unsynchronised constant variable num: Integer = 3;
 synchronised constant variable PI: Integer = 3.1451;
-
 volatile mutable variable str: Ligature = "";
 stable mutable variable file_paths: Ligature = [];
 ```
-
 | Keyword          | Example                                                 | Explanation                                                                                                                                                      |
 |------------------|---------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `synchronised`   | `synchronised constant variable HOURS: Integer = 24;`   | If during compilation another constant & synchronised variable gets the same value as HOURS, HOURS is now hooked (synchronised) to the changes of that variable. |
@@ -31,7 +50,6 @@ stable mutable variable file_paths: Ligature = [];
 
 ## Object members
 Yappacino uses a slightly different syntax for accessing object members.
-
 ```diff
 - JavaScript: env.config()
 + Yappacino : ENV:\config()
@@ -42,7 +60,6 @@ Yappacino uses a slightly different syntax for accessing object members.
 - JavaScript: obj.fields.name
 + Yappacino : obj:\fields\name
 ```
-
 Although the first word can be *lowercase*, we recommend you *UPPERCASE* them.
 
 ## Functions
@@ -53,13 +70,10 @@ Example:
     return 0;
 }
 ```
-
 The arg types follow this pattern: `[arguments] : [types]`. 
-
 Example:
 - `arg : Ligature`
 - `path, amount : Ligature, Integer`
-
 | Keyword       | Example                                               | Explanation                                                                                       |
 |---------------|-------------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | `->`          | `-> Integer`, `->`                                    | Specifies the return type. Similar to `func main() -> Integer:` from other programming languages. |
@@ -79,10 +93,8 @@ transient classification Person {
     -> Integer dependent invariable void async subroutine greet ? (){
         C:\Standard\System\io\format\print\ln("buzz")
     }
-
 }
 ```
-
 | Keyword          | Example                                               | Explanation                                                             |
 |------------------|-------------------------------------------------------|-------------------------------------------------------------------------|
 | `transient`      | `transient classification Person {}`                  | Makes me class be allowed to be initialised only once. Optional         |
@@ -92,18 +104,16 @@ transient classification Person {
 
 ## Loops
 Yappacino introduces a new type of loop - `towards`
-
 ```js
 towards(i within 0..10){}
 ```
 Which, in JavaScript, would look something like
 ```js
-for(let i = 0; i < 10; i++){}
+for(let i = 0; i < 10; i++){}{}
 ```
 
 ## Switch
 Yappacino introduces a new type of switch - `compeer`.
-
 ```js
 compeer number {
     1 => C:\Standard\System\io\format\print\ln("One!"),
@@ -116,7 +126,6 @@ compeer number {
     }
 }
 ```
-
 Which, in JavaScript, would look something like
 ```js
 switch (number) {
@@ -138,12 +147,10 @@ switch (number) {
 
 ## Types
 Types are purely visual. They help you, the developer, remember what the variable's value should've been. Types don't do anything.
-
 ```js
 stable mutable variable PI: Integer = 3.1451;
 ```
 Available types are *Integer*, *Ligature** and *NovemHeader**. You can still set any type, these are just the ones that will be collected by Yappacino in case we decide to support types in the future.
-
 - *Ligature is a string.
 - *NovemHeader is a boolean. It supports `true`, `false`, `neither`, `maybe`, `both`, `trueish`, `falseish`, `depends`, `complicated`.
   - Yes, this means you can `if (response.status === maybe)`.
@@ -167,26 +174,6 @@ There's an `/examples` folder! You can view Yappacino being used to *spin a donu
 It isn't! Yappacino is written in Yappacino! Take a look at `src/index.yap`
 
 GitHub doesn't recognise `.yap` as a valid programming language :)
-
-# Yappacino
-
-Yappacino is a superset scripting language and ecosystem for rapid development, featuring brainrot keywords, global package management, and a custom CLI (`yapm`).
-
-## Features
-- Custom syntax and keywords
-- Package manager (`yapm`) for project creation, install/uninstall, transpile, and import fixing
-- Integration with `retro.exe` for Windows
-- Global library support via `.yapp/src/libs`
-- Fun import keyword: `yapport <libname>`
-
-## Quick Start
-1. `yapm init` — Initialize a new project
-2. `yapm new <name>` — Create a new project
-3. `yapm install <pkg>` — Install a package
-4. `yapm install -g <pkg>` — Install a global package
-5. `yapm transpile` — Transpile `.yap` files to JS
-6. `yapm fix-imports` — Fix import statements
-7. `yapm retro-init` — Set up `retro.exe` for Windows
 
 ## License
 See `LICENSE.md` for details.
