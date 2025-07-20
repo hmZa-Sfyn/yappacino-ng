@@ -11,6 +11,9 @@ Usage:
   yapm new <name>          # Create a new yap project in <name> folder
   yapm transpile           # Transpile all .yap files to .js
   yapm fix-imports         # Fix imports in .yap files
+  yapm retro-init          # Initialize retro.exe integration
+  yapm install <pkg>       # Install a package
+  yapm uninstall <pkg>     # Uninstall a package
 `);
 }
 
@@ -59,10 +62,47 @@ function fixImports() {
     console.log('Imports fixed.');
 }
 
+function retroInit() {
+    const userBin = path.join(process.env.USERPROFILE || process.env.HOME, '.yappacino', 'bin');
+    fs.mkdirSync(userBin, { recursive: true });
+    const retroSrc = path.join('.wintools', 'retro.exe');
+    const retroDest = path.join(userBin, 'retro.exe');
+    if (!fs.existsSync(retroSrc)) {
+        console.log('retro.exe not found in .wintools.');
+        return;
+    }
+    fs.copyFileSync(retroSrc, retroDest);
+    console.log(`retro.exe copied to ${retroDest}`);
+    // Optionally, add userBin to PATH (user must restart shell)
+    console.log('Add the following to your PATH if not already present:');
+    console.log(userBin);
+}
+
+function installPkg(pkg) {
+    if (!pkg) return usage();
+    try {
+        execSync(`retro install ${pkg}`, { stdio: 'inherit' });
+    } catch (e) {
+        console.log('Failed to install package:', e.message);
+    }
+}
+
+function uninstallPkg(pkg) {
+    if (!pkg) return usage();
+    try {
+        execSync(`retro uninstall ${pkg}`, { stdio: 'inherit' });
+    } catch (e) {
+        console.log('Failed to uninstall package:', e.message);
+    }
+}
+
 const args = process.argv.slice(2);
 if (args.length === 0) usage();
 else if (args[0] === 'init') initProject();
 else if (args[0] === 'new') newProject(args[1]);
 else if (args[0] === 'transpile') transpile();
 else if (args[0] === 'fix-imports') fixImports();
+else if (args[0] === 'retro-init') retroInit();
+else if (args[0] === 'install') installPkg(args[1]);
+else if (args[0] === 'uninstall') uninstallPkg(args[1]);
 else usage();
