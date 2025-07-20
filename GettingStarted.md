@@ -49,6 +49,18 @@ C:\Standard\System\io\format\print\ln(mylib.hello());
 - `compeer` — Switch
 - `towards` — For loop
 
+### Example: Using the |> Pipe Operator
+```yap
+-> Integer independent invariable function double(x: Integer) {
+    return x * 2;
+}
+-> Integer independent invariable function square(x: Integer) {
+    return x * x;
+}
+volatile mutable variable result: Integer = 5 |> double |> square;
+C:\Standard\System\io\format\print\ln(result); // Output: 100
+```
+
 ## 8. Explore Examples
 Check the `/example-projects` and `/examples` folders for more demos.
 
